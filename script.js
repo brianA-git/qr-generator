@@ -58,33 +58,32 @@ function hideShortSection() {
 }
 
 /* =============================================
-  TINYURL API CALL
+  URL SHORTENER API CALL
   This is your first real API call — a "fetch".
   fetch() sends a request to an external server
   and waits for a response. It's "async/await"
   because it takes time (network round trip).
 
-  TinyURL has a free public API endpoint:
-  https://tinyurl.com/api-create.php?url=YOUR_URL
+  We use is.gd — a free URL shortener with a
+  clean API that supports CORS (meaning browsers
+  are allowed to call it directly, no proxy needed).
+
+  API format:
+  https://is.gd/create.php?format=simple&url=YOUR_URL
   It returns the short URL as plain text.
 ============================================= */
 async function shortenURL(url) {
   showShortState('loading');
 
   try {
-    // We use a CORS proxy because TinyURL's API
-    // doesn't allow direct browser requests.
-    // allorigins.win is a free proxy that forwards
-    // the request and returns the result.
-    const apiURL  = `https://api.allorigins.win/get?url=${encodeURIComponent('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(url))}`;
+    const apiURL   = `https://is.gd/create.php?format=simple&url=${encodeURIComponent(url)}`;
     const response = await fetch(apiURL);
 
-    if (!response.ok) throw new Error('Network response was not ok');
+    if (!response.ok) throw new Error('Bad response');
 
-    const data      = await response.json();
-    const shortened = data.contents.trim();
+    const shortened = (await response.text()).trim();
 
-    // Validate that we actually got a tinyurl back
+    // Validate we got a real URL back
     if (!shortened.startsWith('http')) throw new Error('Invalid response');
 
     // Show the result
