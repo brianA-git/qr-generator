@@ -1,0 +1,379 @@
+/* =============================================
+  CSS VARIABLES
+  All colors, fonts, and spacing defined once
+  here. Light mode by default; dark mode
+  auto-switches based on the OS preference.
+============================================= */
+:root {
+  --bg:           #F5F3EE;
+  --card-bg:      #FFFFFF;
+  --text:         #1A1916;
+  --text-muted:   #888580;
+  --border:       #E4E1D9;
+  --accent:       #1A1916;
+  --accent-text:  #F5F3EE;
+  --input-bg:     #F5F3EE;
+  --btn-bg:       #F0EDE6;
+  --btn-hover:    #E4E1D9;
+  --shadow:       0 4px 32px rgba(0,0,0,0.08);
+  --empty-color:  #C8C5BE;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:           #111110;
+    --card-bg:      #1C1B19;
+    --text:         #F0EDE6;
+    --text-muted:   #6E6C67;
+    --border:       #2A2926;
+    --accent:       #F0EDE6;
+    --accent-text:  #1A1916;
+    --input-bg:     #242320;
+    --btn-bg:       #242320;
+    --btn-hover:    #2E2D29;
+    --shadow:       0 4px 32px rgba(0,0,0,0.4);
+    --empty-color:  #3A3835;
+  }
+}
+
+/* =============================================
+  RESET & BASE
+  Clears browser defaults for consistent
+  layout across all browsers.
+============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* =============================================
+  CARD
+  The centered container. max-width keeps it
+  from getting too wide on desktop. The subtle
+  border + shadow lift it off the background.
+============================================= */
+.card {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+/* =============================================
+  CARD HEADER
+  Logo mark + title side by side using flexbox.
+============================================= */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.logo-mark {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--accent);
+  color: var(--accent-text);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* =============================================
+  SECTIONS
+  Consistent vertical spacing between each
+  labeled group of controls.
+============================================= */
+.section {
+  margin-bottom: 20px;
+}
+
+.section-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* =============================================
+  URL INPUT
+  Monospace font makes URLs easier to read.
+  Full width with subtle focus ring.
+============================================= */
+.url-input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.url-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.url-input:focus {
+  border-color: var(--accent);
+}
+
+/* =============================================
+  COLOR CONTROLS
+  A flex row with two color pickers and
+  four preset buttons. flex-wrap allows them
+  to wrap onto a second line on narrow screens.
+============================================= */
+.color-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.color-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.color-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* =============================================
+  COLOR SWATCH
+  We hide the ugly default color input and
+  show just a styled square. Clicking it still
+  opens the native color picker.
+============================================= */
+.swatch-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.swatch-wrap:hover {
+  border-color: var(--text-muted);
+}
+
+.color-swatch {
+  width: 150%;
+  height: 150%;
+  border: none;
+  margin: -25%;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* =============================================
+  PRESET BUTTONS
+  Quick color scheme buttons. Small pill shape.
+============================================= */
+.preset-btn {
+  background: var(--btn-bg);
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+
+.preset-btn:hover {
+  background: var(--btn-hover);
+  color: var(--text);
+}
+
+.preset-btn.active {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* =============================================
+  QR WRAPPER
+  The preview area. Position: relative lets us
+  absolutely position the dog overlay on top
+  of the QR canvas.
+============================================= */
+.qr-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--input-bg);
+  border-radius: 16px;
+  min-height: 260px;
+  border: 1.5px dashed var(--border);
+  overflow: hidden;
+}
+
+/* =============================================
+  EMPTY STATE
+  Shown before any URL is entered.
+  Centered with flex, muted colors.
+============================================= */
+.qr-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--empty-color);
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 32px;
+  transition: opacity 0.2s;
+}
+
+.qr-empty.hidden {
+  display: none;
+}
+
+/* =============================================
+  QR OUTPUT
+  Where the library injects the QR canvas.
+  We use clip-path to round all four corners
+  of the QR code — this gives the "wedged edges"
+  effect. border-radius alone doesn't work on
+  canvas elements in all browsers.
+============================================= */
+.qr-output {
+  display: none;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.qr-output.visible {
+  display: block;
+}
+
+/* Round the QR canvas corners */
+.qr-output canvas {
+  border-radius: 12px;
+  display: block;
+}
+
+/* =============================================
+  DOG OVERLAY
+  The dog SVG floats over the center of the QR
+  code. We use absolute positioning + transform
+  to precisely center it. A white circle behind
+  it creates a clean cutout from the QR pattern.
+============================================= */
+.dog-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%;
+  padding: 3px;
+  box-shadow: 0 0 0 3px white;
+  z-index: 10;
+}
+
+.dog-overlay.visible {
+  display: flex;
+}
+
+.dog-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* =============================================
+  EXPORT BUTTON
+  Full-width, dark pill button at the bottom.
+  Disabled state is faded and not clickable.
+============================================= */
+.export-btn {
+  width: 100%;
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.15s, transform 0.1s;
+  margin-top: 4px;
+}
+
+.export-btn:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.export-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.export-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

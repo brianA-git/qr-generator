@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Generator</title>
+
+  <!-- =============================================
+    FONTS
+    "Syne" for headings — geometric and distinctive.
+    "DM Mono" for the URL input — monospace feels
+    right for technical/URL input fields.
+    "DM Sans" for body text — clean and readable.
+  ============================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- =============================================
+    QR CODE LIBRARY
+    qrcode.min.js is a single lightweight script
+    that does the complex math of generating QR
+    codes. We load it from cdnjs (a public CDN).
+    Without this, generating a real QR code from
+    scratch would be hundreds of lines of math.
+  ============================================= -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Link to our separate CSS file -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- =============================================
+    HTML STRUCTURE
+    The visible skeleton of the app.
+    Three main sections inside the card:
+    1. Input + color controls
+    2. QR preview area
+    3. Export button
+  ============================================= -->
+  <div class="card">
+
+    <header class="card-header">
+      <div class="logo-mark">QR</div>
+      <div>
+        <h1 class="card-title">QR Generator</h1>
+        <p class="card-sub">Paste a URL. Get a code.</p>
+      </div>
+    </header>
+
+    <!-- URL Input -->
+    <div class="section">
+      <label class="section-label" for="url-input">URL</label>
+      <input
+        type="url"
+        id="url-input"
+        class="url-input"
+        placeholder="https://example.com"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <!-- Color Pickers -->
+    <div class="section">
+      <span class="section-label">Colors</span>
+      <div class="color-row">
+        <div class="color-item">
+          <label class="color-label" for="color-dark">QR Color</label>
+          <div class="swatch-wrap">
+            <input type="color" id="color-dark" class="color-swatch" value="#1A1916" />
+          </div>
+        </div>
+        <div class="color-item">
+          <label class="color-label" for="color-light">Background</label>
+          <div class="swatch-wrap">
+            <input type="color" id="color-light" class="color-swatch" value="#F5F3EE" />
+          </div>
+        </div>
+        <button class="preset-btn" data-dark="#1A1916" data-light="#F5F3EE" title="Classic">Classic</button>
+        <button class="preset-btn" data-dark="#FFFFFF" data-light="#1A1916" title="Invert">Invert</button>
+        <button class="preset-btn" data-dark="#2D6A4F" data-light="#EAF3DE" title="Forest">Forest</button>
+        <button class="preset-btn" data-dark="#1D3557" data-light="#E8F0FA" title="Ocean">Ocean</button>
+      </div>
+    </div>
+
+    <!-- QR Preview -->
+    <div class="section">
+      <span class="section-label">Preview</span>
+      <div class="qr-wrapper">
+        <!-- Empty state shown before a URL is entered -->
+        <div class="qr-empty" id="qr-empty">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="18" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="2" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="5" y="5" width="6" height="6" rx="1" fill="currentColor"/>
+            <rect x="21" y="5" width="6" height="6" rx="1" fill="currentColor"/>
+            <rect x="5" y="21" width="6" height="6" rx="1" fill="currentColor"/>
+            <rect x="21" y="18" width="3" height="3" fill="currentColor"/>
+            <rect x="27" y="18" width="3" height="3" fill="currentColor"/>
+            <rect x="21" y="24" width="3" height="3" fill="currentColor"/>
+            <rect x="27" y="24" width="3" height="3" fill="currentColor"/>
+          </svg>
+          <p>Enter a URL above<br>to generate your QR code</p>
+        </div>
+
+        <!-- The QR canvas is injected here by JS -->
+        <div id="qr-output" class="qr-output"></div>
+
+        <!-- Dog logo overlay — centered on top of the QR code -->
+        <div class="dog-overlay" id="dog-overlay">
+          <svg class="dog-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Dog logo">
+            <!-- Ears -->
+            <ellipse cx="22" cy="34" rx="10" ry="14" fill="#8B6914" transform="rotate(-15 22 34)"/>
+            <ellipse cx="58" cy="34" rx="10" ry="14" fill="#8B6914" transform="rotate(15 58 34)"/>
+            <!-- Inner ears -->
+            <ellipse cx="22" cy="35" rx="6" ry="9" fill="#C4956A" transform="rotate(-15 22 35)"/>
+            <ellipse cx="58" cy="35" rx="6" ry="9" fill="#C4956A" transform="rotate(15 58 35)"/>
+            <!-- Head -->
+            <ellipse cx="40" cy="44" rx="22" ry="20" fill="#C4956A"/>
+            <!-- Forehead -->
+            <ellipse cx="40" cy="30" rx="18" ry="14" fill="#C4956A"/>
+            <!-- Forehead patch -->
+            <ellipse cx="40" cy="28" rx="10" ry="8" fill="#8B6914" opacity="0.5"/>
+            <!-- Eyes -->
+            <circle cx="32" cy="38" r="5" fill="white"/>
+            <circle cx="48" cy="38" r="5" fill="white"/>
+            <circle cx="33" cy="38" r="3" fill="#2C1810"/>
+            <circle cx="49" cy="38" r="3" fill="#2C1810"/>
+            <!-- Eye shine -->
+            <circle cx="34" cy="37" r="1" fill="white"/>
+            <circle cx="50" cy="37" r="1" fill="white"/>
+            <!-- Nose -->
+            <ellipse cx="40" cy="48" rx="5" ry="3.5" fill="#2C1810"/>
+            <!-- Nose highlight -->
+            <ellipse cx="38.5" cy="47" rx="1.5" ry="1" fill="#5C3828" opacity="0.6"/>
+            <!-- Mouth -->
+            <path d="M37 52 Q40 55 43 52" stroke="#2C1810" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <!-- Cheeks -->
+            <ellipse cx="28" cy="50" rx="5" ry="3" fill="#E8A07A" opacity="0.5"/>
+            <ellipse cx="52" cy="50" rx="5" ry="3" fill="#E8A07A" opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Button -->
+    <button class="export-btn" id="export-btn" disabled>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Export QR Code
+    </button>
+
+  </div>
+
+  <!-- Link to our separate JS file — placed at the bottom so
+       the HTML elements above are loaded before JS tries to find them -->
+  <script src="script.js"></script>
+</body>
+</html>
