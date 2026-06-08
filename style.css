@@ -342,6 +342,124 @@ body {
 }
 
 /* =============================================
+  SHORTENED URL SECTION
+  Hidden by default; revealed by JS once a
+  URL is entered. Contains three inner states:
+  loading (spinner), result (link + copy btn),
+  and error — only one is visible at a time.
+============================================= */
+.short-section {
+  display: none;
+}
+
+.short-section.visible {
+  display: block;
+}
+
+.short-box {
+  background: var(--input-bg);
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  padding: 10px 14px;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+}
+
+/* Loading spinner row */
+.short-loading {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.short-loading.visible {
+  display: flex;
+}
+
+/* Spinning circle animation */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--text-muted);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Result row: short URL link + copy button */
+.short-result {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.short-result.visible {
+  display: flex;
+}
+
+.short-url {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.12s;
+}
+
+.short-url:hover {
+  color: var(--text-muted);
+}
+
+/* Copy button */
+.copy-btn {
+  background: var(--btn-bg);
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.copy-btn:hover {
+  background: var(--btn-hover);
+  color: var(--text);
+}
+
+.copy-btn.copied {
+  border-color: #2D6A4F;
+  color: #2D6A4F;
+}
+
+/* Error state */
+.short-error {
+  display: none;
+  font-size: 12px;
+  color: #C0392B;
+}
+
+.short-error.visible {
+  display: flex;
+}
+
+/* =============================================
   EXPORT BUTTON
   Full-width, dark pill button at the bottom.
   Disabled state is faded and not clickable.
